@@ -1,0 +1,15 @@
+Fonction : 
+--------
+Afficher les matières présentes dans Hyperplanning (clé, code, libellé et libellé long).
+   
+Execution :
+---------
+ - Double-cliquez sur ExecuteExempleHpSvcW.bat.
+ - Ouvrir ExempleHpSvcW.py avec IDLE Python et l'executer (F5)
+ - Saisissez sur une ligne de commande MsDos : ExempleHpSvcW.py 
+
+Prérequis  :
+---------
+En plus de Python 3.6, il faudra installer le module Zeep.
+Pour installer Zeep, saisir sur une console DOS la commande :
+    pip install zeep
