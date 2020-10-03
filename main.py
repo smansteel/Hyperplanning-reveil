@@ -3,12 +3,9 @@ import requests
 import datetime
 import pytz
 import os
-from dotenv import load_dotenv
-load_dotenv()
-tempsdeglande = 7200 #temps a reveiller avant le début des cours en secondes
-
+import utilisateur0
 transfert = ""
-D = []
+D = [""]
 bla = []
 datetrouvee = False
 cours_string = ""
@@ -16,13 +13,13 @@ ajd = datetime.date.today().strftime("%Y%m%d")
 demain_nf = datetime.date.today() + datetime.timedelta(days=1)
 demain = demain_nf.strftime("%Y%m%d")
 cours = []
-
+dossier = os.listdir()
 
 def take_second(elem):
     return elem[:7]
 
-url = os.getenv('url_calendrier')
-
+url = utilisateur0.url_calendrier
+tempsdeglande = int(utilisateur0.temps_a_reveiller_avant_les_cours)
 
 def download_calendar():
     r = requests.get(url, allow_redirects=True)
@@ -74,9 +71,14 @@ if datecoursdemain == demain : # On vérifie qu'on a cours demain, ça serait ba
     courshdp = target_tz.normalize(courshdp)
 
     alarm = (courshdp.hour * 60 + courshdp.minute) * 60 + courshdp.second #conversion en secondes
-    gmailacc = os.getenv('gmailacc') #on obtient les variables
-    gmailsecret = os.getenv('gmailsecret')
-    print(alarm-tempsdeglande)
-    datas=f"secret={gmailsecret}&to={gmailacc}&device=&priority=normal&payload={alarm-tempsdeglande}"
-    print(datas)
-    print(requests.post('https://llamalab.com/automate/cloud/message',data=datas,headers={'content-type': 'application/x-www-form-urlencoded'})) #la requête finale !
+
+    datas=f"secret={utilisateur0.gmailsecret}&to={utilisateur0.gmailacc}&device=&priority=normal&payload={alarm-tempsdeglande}"
+    requests.post('https://llamalab.com/automate/cloud/message',data=datas,headers={'content-type': 'application/x-www-form-urlencoded'}) #la requête finale !
+
+"""dir_path = os.path.dirname(os.path.realpath(__file__))
+path = f'{dir_path}/user'
+for i in range(0,len(os.listdir())):
+    if os.listdir()[i][:11]=="utilisateur":
+        print(dossier)
+
+    print(os.listdir()[i][:10])"""
