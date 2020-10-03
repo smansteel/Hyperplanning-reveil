@@ -1,10 +1,10 @@
+#les imports tout propres
 import requests
 import datetime
 import pytz
-
 import os
-import json
 from dotenv import load_dotenv
+load_dotenv()
 tempsdeglande = 7200
 etatmail = 0
 transfert = ""
@@ -38,7 +38,6 @@ for i in range(1, len(bla) - 1):
     cours_string += bla[i].split("\n")[5] + " "
 
 datesdecours = cours_string.split(" DTSTART:")
-datesdecours.pop
 datesdecours[0] = datesdecours[0][8:]
 datesdecours.sort()
 ajd = datetime.date.today().strftime("%Y%m%d")
@@ -53,24 +52,31 @@ for i in range(0, len(datesdecours)):
             print(datesdecours[i])
             datecoursdemain = datesdecours[i]
             datetrouvee = True
+
         else:
             break
-if datecoursdemain != demain :
-    exit
-coursutc = datetime.datetime.strptime(datecoursdemain, '%Y%m%dT%H%M%SZ')
-target_tz = pytz.timezone('Europe/Paris')
-local_tz = pytz.timezone('UTC')
-courshdp = local_tz.localize(coursutc)
-courshdp = target_tz.normalize(courshdp)
+for i in range(0,len(bla)):
+    if datecoursdemain in bla[i]:
+        numerodecours = i
+print(numerodecours)
 
-alarm = (courshdp.hour * 60 + courshdp.minute) * 60 + courshdp.second
-gmailacc = os.getenv('gmailacc')
-gmailsecret = os.getenv('gmailsecret')
-print(alarm-tempsdeglande)
+infocours = str(bla[numerodecours])
+print(infocours)
+print(infocours[infocours.find("DESCRIPTION;"):infocours.find("\nEND")])
 
-requests.post('https://llamalab.com/automate/cloud/message',
-              json={"secret": gmailsecret,
-                    "to": gmailacc,
-                    "device": null,
-                    "priority": "normal",
-                    "payload": alarm-tempsdeglande})
+
+if datecoursdemain == demain :
+
+    coursutc = datetime.datetime.strptime(datecoursdemain, '%Y%m%dT%H%M%SZ')
+    target_tz = pytz.timezone('Europe/Paris')
+    local_tz = pytz.timezone('UTC')
+    courshdp = local_tz.localize(coursutc)
+    courshdp = target_tz.normalize(courshdp)
+
+    alarm = (courshdp.hour * 60 + courshdp.minute) * 60 + courshdp.second
+    gmailacc = os.getenv('gmailacc')
+    gmailsecret = os.getenv('gmailsecret')
+    print(alarm-tempsdeglande)
+    datas=f"secret={gmailsecret}&to={gmailacc}&device=&priority=normal&payload={alarm-tempsdeglande}"
+    print(datas)
+    print(requests.post('https://llamalab.com/automate/cloud/message',data=datas,headers={'content-type': 'application/x-www-form-urlencoded'}))
