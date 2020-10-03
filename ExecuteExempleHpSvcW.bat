@@ -1,2 +1,0 @@
-ExempleHpSvcW.py
-pause
