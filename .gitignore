@@ -1,0 +1,11 @@
+# Default ignored files
+/workspace.xml
+.env
+.idea/workspace.xml
+cal.ics
+*.iml
+*.xml
+*.pyc
+venv/Lib/site-packages/_distutils_hack/override.py
+venv/Lib/site-packages/_distutils_hack/__init__.py
+venv/
